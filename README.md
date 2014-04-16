@@ -34,3 +34,13 @@ sample client sketch for processing.
     }
   }
 </pre>
+
+Libraries
+================
+HTTPCamera uses the following libraries.
+
+OpenCV
+* http://opencv.org/
+
+NanoHTTPD
+* https://github.com/elonen/nanohttpd
