@@ -9,23 +9,31 @@ import org.opencv.core.MatOfInt;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
-
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 
 public class HTTPImageServer extends NanoHTTPD {
 	Mat image;
+	int jpeg_quality = 70;
 	
 	public HTTPImageServer(int port) {
 		super(port);
 		image = new Mat();
 	}
 
+	public int getJpegQuality() {
+		return jpeg_quality;
+	}
+	
+	public void setJpegQuality(int val) {
+		if (val < 1) val = 1;
+		if (val > 100) val = 100;
+		this.jpeg_quality = val;
+	}
+	
 	@Override public Response serve(IHTTPSession session) {
-        Method method = session.getMethod();
         String uri = session.getUri();
         
-        System.out.println(method + " '" + uri + "' ");
         if ("/camera.jpg".equals(uri)) {
         	return serveCameraImage(session);
         }
@@ -42,7 +50,7 @@ public class HTTPImageServer extends NanoHTTPD {
 			image.setTo(new Scalar(255, 0, 0));
 		}
 		
-		MatOfInt  params = new MatOfInt(Highgui.IMWRITE_JPEG_QUALITY, 90);
+		MatOfInt  params = new MatOfInt(Highgui.IMWRITE_JPEG_QUALITY, jpeg_quality);
 		MatOfByte mat_of_buf = new MatOfByte();
 		Highgui.imencode(".jpg", image, mat_of_buf, params);
 		byte[] byteArray = mat_of_buf.toArray();
