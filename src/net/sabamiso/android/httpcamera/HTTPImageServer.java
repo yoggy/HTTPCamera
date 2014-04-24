@@ -33,8 +33,9 @@ public class HTTPImageServer extends NanoHTTPD {
 	
 	@Override public Response serve(IHTTPSession session) {
         String uri = session.getUri();
+        String [] paths = uri.split("\\?");
         
-        if ("/camera.jpg".equals(uri)) {
+        if (paths != null && "/camera.jpg".equals(paths[0])) {
         	return serveCameraImage(session);
         }
         
@@ -57,7 +58,8 @@ public class HTTPImageServer extends NanoHTTPD {
 		ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
 		
 		NanoHTTPD.Response res = new NanoHTTPD.Response(Status.OK, "image/jpeg", bis);
-		
+		res.addHeader("X-Content-Type-Options", "nosniff");
+		res.addHeader("Access-Control-Allow-Origin", "*");
 		return res;
 	}
 
