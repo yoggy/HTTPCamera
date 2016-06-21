@@ -8,7 +8,8 @@ import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.highgui.Highgui;
+import org.opencv.imgcodecs.Imgcodecs;
+
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 
@@ -51,9 +52,9 @@ public class HTTPImageServer extends NanoHTTPD {
 			image.setTo(new Scalar(255, 0, 0));
 		}
 		
-		MatOfInt  params = new MatOfInt(Highgui.IMWRITE_JPEG_QUALITY, jpeg_quality);
+		MatOfInt  params = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, jpeg_quality);
 		MatOfByte mat_of_buf = new MatOfByte();
-		Highgui.imencode(".jpg", image, mat_of_buf, params);
+		Imgcodecs.imencode(".jpg", image, mat_of_buf, params);
 		byte[] byteArray = mat_of_buf.toArray();
 		ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
 		
